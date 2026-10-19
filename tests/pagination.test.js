@@ -73,6 +73,7 @@ async function checkLastPageDeletion(feature) {
   globalThis.window = { confirm: () => true };
   globalThis.fetch = async (path, options = {}) => {
     const url = new URL(path, 'http://localhost');
+    if (url.pathname === '/api/session') return { status: 200, ok: true };
     if (options.method === 'DELETE') {
       const id = url.pathname.split('/').at(-1);
       records = records.filter((record) => record._id !== id);

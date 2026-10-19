@@ -99,11 +99,22 @@ The commute buffer uses the nearest-rank 80th percentile of non-negative delays,
 npm run verify
 ```
 
-This runs 16 tests, ESLint, and Prettier. Individual commands are `npm test`, `npm run lint`, and `npm run format:check`. Pagination tests use a mock DOM and API; they do not test a live database or browser layout. Local CRUD and incognito behavior were checked by Manoj. Real mobile testing and public deployment have not been verified.
+This runs 23 tests, ESLint, and Prettier. Individual commands are `npm test`, `npm run lint`, and `npm run format:check`. Tests cover validation, statistics, pagination, session startup, connection reuse, and the hosted HTTP entry point. Database tests use a mock MongoDB client; frontend tests use a mock DOM/API. They do not verify a live Atlas cluster, Vercel deployment, or browser layout. Local CRUD and incognito behavior were checked by Manoj. Real mobile testing and public deployment have not been verified.
 
 ## Hosting
 
-The app needs a Node-compatible host and a reachable MongoDB database. GitHub Pages alone cannot run its backend. The production start command is `node src/server.js`; environment variables are supplied by the host. HTTPS is needed for production cookies, with `NODE_ENV=production`. No public deployment URL is recorded here.
+The repository includes Vercel’s Express preset in `vercel.json`. Vercel uses the default Express export in `src/app.js` for the API and serves `public/` through its CDN. The frontend starts a browser session before making parallel API requests. MongoDB connections are reused within each function instance.
+
+| Host environment variable | Value                                            |
+| ------------------------- | ------------------------------------------------ |
+| `MONGODB_URI`             | Atlas connection string, stored as a secret      |
+| `MONGODB_DB`              | Hosted database name, such as `ridetrace_boston` |
+| `APP_SECRET`              | A stable random secret of at least 32 characters |
+| `NODE_ENV`                | `production`                                     |
+
+These variables are needed for both Production and Preview deployments. The Atlas network access list must allow connections from the deployment. The stop catalog belongs in that hosted database; a local import does not populate Atlas. The existing seed command can import it when `.env` points to Atlas.
+
+The local server still runs through `npm start`. GitHub Pages alone cannot run the backend. No public deployment URL or live Atlas verification is recorded yet.
 
 ## Data source and attribution
 
