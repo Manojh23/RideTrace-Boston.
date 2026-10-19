@@ -10,4 +10,4 @@ Both features have separate full-stack responsibilities and do not query the oth
 
 Local browser tests and the 8,035-stop import were evidenced by Manoj. Public deployment, real mobile validation, final course deliverables, and instructor approval/review remain separate. See `docs/TESTING.md` and `docs/RUBRIC_AUDIT.md`.
 
-Generative AI assisted with the baseline and review fixes. Students must review, understand, test, and disclose their own contributions as required by the course.
+See the concise [AI-use disclosure](README.md#ai-use-disclosure) and [design document](docs/DESIGN.md).

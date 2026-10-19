@@ -6,7 +6,7 @@
 
 |   # | Rubric requirement                                              | Pts | Yes / No | Evidence or remaining action                                                                                                                                 |
 | --: | --------------------------------------------------------------- | --: | :------: | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-|   1 | Design document: description, personas, stories, mockups        |  50 |   Yes    | docs/DESIGN.md includes all components; live page URLs corrected; 3 mockups preserved.                                                                       |
+|   1 | Design document: description, personas, stories, mockups        |  50 |   Yes    | docs/DESIGN.md includes all four components, six stories with acceptance criteria, and four annotated boards; feature boards include local screenshots.      |
 |   2 | All professor-approved requirements completed                   |  15 |    No    | Approved Slack proposal/approval not supplied; remaining filter and validation browser checks are pending.                                                   |
 |   3 | Usable app with instructions                                    |   5 |    No    | Guide exists and core CRUD was reported working. Responsive styles and pagination improved; real mobile/keyboard and remaining browser checks still pending. |
 |   4 | Useful to a final user                                          |   5 |    No    | Concrete rider personas/use cases exist; independent rider feedback has not been supplied.                                                                   |

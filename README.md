@@ -24,7 +24,17 @@ This is an actual local-browser screenshot supplied by Manoj on October 19, 2026
 
 ## Design mockups
 
-The [design document](docs/DESIGN.md) contains the [overview](docs/mockups/overview-concept.png), [commute dashboard](docs/mockups/commutes-concept.png), and [transfer board](docs/mockups/transfers-concept.png) concept mockups. These are planning illustrations with example data, distinct from the running-app screenshot above.
+The [design document](docs/DESIGN.md) includes the project description, two rider personas, six independently owned user stories with acceptance criteria, and four annotated design boards.
+
+| Overview                                                                                                                | Manoj’s commute dashboard                                                                                                      |
+| ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| [![Overview wireframe and interface concept](docs/mockups/overview-wireframe.png)](docs/mockups/overview-wireframe.png) | [![Commute wireframe and actual local page capture](docs/mockups/commutes-wireframe.png)](docs/mockups/commutes-wireframe.png) |
+
+| Kavya’s transfer board                                                                                                            | Responsive layout plan                                                                              |
+| --------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| [![Transfer wireframe and actual local page capture](docs/mockups/transfers-wireframe.png)](docs/mockups/transfers-wireframe.png) | [![Mobile layout wireframes](docs/mockups/mobile-wireframe.png)](docs/mockups/mobile-wireframe.png) |
+
+The feature boards include partial local screenshots supplied by Manoj. The overview image is a concept illustration, and the mobile board describes intended behavior rather than completed device testing. See [visual sources and captions](docs/mockups/README.md).
 
 ## Requirements
 
@@ -42,7 +52,7 @@ npm install
 cp .env.example .env
 ```
 
-Edit `.env`: set `MONGODB_URI`, `MONGODB_DB` and replace `APP_SECRET` with a **long random secret**. Example generator: `node -e "console.log(require('node:crypto').randomBytes(32).toString('hex'))"` (this is a shell example, not application backend code). **Never commit `.env`.**
+Edit `.env`: set `MONGODB_URI`, `MONGODB_DB` and replace `APP_SECRET` with a **long random secret**. Example generator: `node --input-type=module -e "import { randomBytes } from 'node:crypto'; console.log(randomBytes(32).toString('hex'))"`. **Never commit `.env`.**
 
 Start MongoDB (if using Docker):
 
@@ -83,7 +93,7 @@ Visit **http://localhost:3000**. The GTFS importer checks that the official feed
 
 - **Positive delay** = `max(0, actualMinutes - expectedMinutes)`.
 - **On-time** = a journey that is no more than two minutes later than expected, including early arrivals.
-- **Departure buffer** = the 80th percentile of positive delays rounded **up** to the nearest five minutes, shown only after three logs. It is a heuristic, not a live prediction.
+- **Departure buffer** = the nearest-rank 80th percentile of non-negative delays rounded **up** to the nearest five minutes, shown only after three logs. It is a heuristic, not a live prediction.
 - **Typical transfer time** = median of report durations matching current filters.
 - Statistics use at most the most recent 2,500 matching reports/logs for predictable server workloads. The corresponding endpoints return `maximumAnalyzed`.
 
@@ -96,7 +106,7 @@ This project is structured as **one shared repository with separate full-stack f
 | Manoj Harridoss (`@Manojh23`)             | `src/features/manoj/commutes.js`  | `public/manoj/` | `tests/manoj-commutes.test.js`  | `commuteLogs`      |
 | Kavya Kusuma Reddy Korem (`@kavya-korem`) | `src/features/kavya/transfers.js` | `public/kavya/` | `tests/kavya-transfers.test.js` | `transferReports`  |
 
-Shared infrastructure remains in `src/lib/`, `src/auth/`, `src/db/`, `public/js/api.js`, `src/routes/stops.js`, and the app server. See [GitHub Setup](docs/GITHUB_SETUP.md) and [Claude Code Notes](CLAUDE.md). The feature ownership labels are the planned team responsibilities, not claims about the authorship of the AI-generated baseline.
+Shared infrastructure remains in `src/lib/`, `src/auth/`, `src/db/`, `public/js/api.js`, `src/routes/stops.js`, and the app server. See [GitHub Setup](docs/GITHUB_SETUP.md) and [Claude Code Notes](CLAUDE.md). The feature ownership labels describe full-stack responsibilities; Git history records individual commits.
 
 **Page URLs:** `/manoj/` and `/kavya/` (plus `/` for the shared home page and `/guide.html` for usage instructions).
 
@@ -134,7 +144,7 @@ The `eslint.config.js` file uses ESLint flat config, and `.prettierrc.json` prov
 
 Deploy to any Node-compatible public host with an accessible MongoDB Atlas cluster. Set `MONGODB_URI`, `MONGODB_DB`, `APP_SECRET` (32+ random chars), `NODE_ENV=production`, and the platform-provided `PORT` in the host environment. Use **`node src/server.js`** as the host start command (production uses host environment variables, not a local `.env`). Import GTFS once using a network-enabled terminal with the same DB credentials. Enable TLS/HTTPS so secure cookies work and limit database network access. Do not commit credentials or a real `.env` file.
 
-A public URL cannot be created in an offline code ZIP; deployment is a separate step requiring your service accounts. Likewise, the course Google Form, narrated public demo, code freeze, and professor code review must be completed by the team. See [Rubric Audit](docs/RUBRIC_AUDIT.md) for evidence and outstanding items.
+Public deployment is a separate step requiring a Node-compatible hosting account and an accessible MongoDB database. Likewise, the course Google Form, narrated public demo, code freeze, and professor code review must be completed by the team. See [Rubric Audit](docs/RUBRIC_AUDIT.md) for evidence and outstanding items.
 
 ## Data source and attribution
 
@@ -142,4 +152,4 @@ Official feed: **https://cdn.mbta.com/MBTA_GTFS.zip**. Documentation: https://gi
 
 ## AI-use disclosure
 
-Generative AI assisted with planning, drafting, and generating implementation and documentation. Both team members should review, understand, test, and take responsibility for their code and user stories before submission, and disclose their AI use to the instructor as requested. The author labels refer to planned assignment ownership, not a claim that either named student personally wrote every line in this generated ZIP.
+Generative AI assisted with MBTA resource research, planning, starter code, tests, and documentation. Each teammate is responsible for reviewing, understanding, testing, and explaining their assigned feature.

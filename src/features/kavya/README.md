@@ -7,4 +7,4 @@ Owner: **Kavya Kusuma Reddy Korem** (GitHub: `@kavya-korem`). This feature imple
 - Tests: `tests/kavya-transfers.test.js`
 - Shared utilities (not owned by either teammate): `src/lib/`, `src/auth/`, `src/db/`, `public/js/api.js`, `public/css/base.css`.
 
-Use a separate Git branch and PR. Initial baseline was AI-assisted and should not be represented as personally authored work without review.
+Use a separate Git branch and PR. See the project’s [AI-use disclosure](../../../README.md#ai-use-disclosure); review, test, and understand your contribution.
