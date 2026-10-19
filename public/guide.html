@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Instructions for using RideTrace Boston, data sources and privacy limitations."
+    />
+    <title>How it works · RideTrace Boston</title>
+    <link rel="icon" href="/assets/icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/css/base.css" />
+  </head>
+  <body>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <header class="site-header">
+      <a class="brand" href="/"
+        ><span class="brand-icon" aria-hidden="true">↗</span
+        ><span>RideTrace<span class="brand-light"> Boston</span></span></a
+      >
+      <nav aria-label="Main navigation" class="nav-links">
+        <a href="/">Overview</a><a href="/manoj/">My commutes</a
+        ><a href="/guide.html">Transfer board (coming soon)</a
+        ><a aria-current="page" href="/guide.html">How it works</a>
+      </nav>
+      <a class="header-cta" href="/manoj/">Start tracking ↗</a>
+    </header>
+    <main id="main" class="container inner-main guide-page">
+      <div class="eyebrow">QUICK START GUIDE</div>
+      <h1>Everything you need to <span>ride with context.</span></h1>
+      <p class="hero-lede">
+        RideTrace is a class project designed to complement official transit information with
+        personal and community-reported history.
+      </p>
+      <div class="guide-grid">
+        <article class="panel guide-card">
+          <span class="step-number">01</span>
+          <h2>Log a journey</h2>
+          <p>
+            Open <a href="/manoj/">My commutes</a>, enter the route label, date, expected minutes,
+            actual minutes and reason. Save, edit, or delete your own logs. Filter the history by
+            route or weekday.
+          </p>
+        </article>
+        <article class="panel guide-card">
+          <span class="step-number">02</span>
+          <h2>Understand the buffer</h2>
+          <p>
+            With at least three commute logs, your dashboard shows the rounded-up 80th percentile of
+            positive delays as a suggested departure buffer. The chart shows averages by weekday.
+            These figures are historical, not forecasts.
+          </p>
+        </article>
+        <article class="panel guide-card">
+          <span class="step-number">03</span>
+          <h2>Explore a connection</h2>
+          <p>
+            Open the <a href="/guide.html">Transfer board (coming soon)</a> and filter by stop,
+            from/to routes, or time of day. Read user reports, typical transfer duration, and
+            missed-connection frequency.
+          </p>
+        </article>
+        <article class="panel guide-card">
+          <span class="step-number">04</span>
+          <h2>Share your experience</h2>
+          <p>
+            Submit a dated transfer report with actual minutes and optional notes. Your report
+            appears publicly as unverified. From the same browser, you can edit or delete it.
+          </p>
+        </article>
+      </div>
+      <section class="panel guide-details">
+        <h2>Privacy and data</h2>
+        <p>
+          Your commute logs are associated with a random, signed, HttpOnly browser cookie and are
+          accessible only from that browser identity. No user account or personal email is
+          collected. If you clear your browser cookies, you may lose access to older entries; the
+          records do not automatically disappear. Transfer reports are public, so do not enter
+          identifying or sensitive information.
+        </p>
+        <p>
+          The stop catalog is imported from the MBTA GTFS feed and credited to
+          <a href="https://www.mbta.com/developers/gtfs" target="_blank" rel="noopener noreferrer"
+            >MBTA / MassDOT</a
+          >. The catalog is read-only. App reports are not official MBTA reports, and there are no
+          live feeds, predictions, official alerts or verified transfer promises.
+        </p>
+        <p>
+          For current transit status, accessibility alerts, emergencies, and journey planning,
+          consult
+          <a href="https://www.mbta.com/" target="_blank" rel="noopener noreferrer"
+            >the MBTA website</a
+          >.
+        </p>
+      </section>
+    </main>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <span>© 2026 RideTrace Boston · Manoj Harridoss &amp; Kavya Kusuma Reddy Korem</span
+        ><a href="/">Back to overview</a>
+      </div>
+    </footer>
+  </body>
+</html>

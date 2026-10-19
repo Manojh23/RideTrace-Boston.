@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Your private MBTA commute history, delay trends and departure buffer."
+    />
+    <title>My commutes · RideTrace Boston</title>
+    <link rel="icon" href="/assets/icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/css/base.css" />
+    <link rel="stylesheet" href="/manoj/commutes.css" />
+    <script type="module" src="/manoj/commutes.js"></script>
+  </head>
+  <body>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <header class="site-header">
+      <a class="brand" href="/"
+        ><span class="brand-icon" aria-hidden="true">↗</span
+        ><span>RideTrace<span class="brand-light"> Boston</span></span></a
+      >
+      <nav aria-label="Main navigation" class="nav-links">
+        <a href="/">Overview</a><a aria-current="page" href="/manoj/">My commutes</a
+        ><a href="/guide.html">Transfer board (coming soon)</a
+        ><a href="/guide.html">How it works</a>
+      </nav>
+      <a class="header-cta" href="/guide.html">Transfer board ↗</a>
+    </header>
+    <main class="container inner-main" id="main">
+      <div class="page-heading">
+        <div>
+          <div class="eyebrow">YOUR PRIVATE WORKSPACE / MANOJ'S FEATURE</div>
+          <h1>My commute <span>insights.</span></h1>
+          <p>Record your trips, understand where time goes, and build a smarter routine.</p>
+        </div>
+        <span class="privacy-pill">◉ Private to this browser</span>
+      </div>
+      <div id="notice" role="status" aria-live="polite" class="notice" hidden></div>
+      <section class="stats-grid" aria-label="Commute reliability summary">
+        <article class="stat-card">
+          <span class="stat-label">TRIPS LOGGED</span><strong id="stat-trips">—</strong
+          ><span class="stat-sub">Personal commute history</span>
+        </article>
+        <article class="stat-card">
+          <span class="stat-label">AVERAGE DELAY</span
+          ><strong><span id="stat-delay">—</span><small> min</small></strong
+          ><span class="stat-sub">Minutes above plan</span>
+        </article>
+        <article class="stat-card">
+          <span class="stat-label">ON-TIME RATE</span
+          ><strong><span id="stat-ontime">—</span><small>%</small></strong
+          ><span class="stat-sub">Within 2 min of plan</span>
+        </article>
+        <article class="stat-card highlighted-stat">
+          <span class="stat-label">SUGGESTED BUFFER</span
+          ><strong><span id="stat-buffer">—</span><small> min</small></strong
+          ><span class="stat-sub" id="buffer-hint">At least 3 logs needed</span>
+        </article>
+      </section>
+      <div class="workspace-grid">
+        <section class="panel form-panel" aria-labelledby="form-title">
+          <div class="panel-heading">
+            <div>
+              <span class="section-kicker">LOG A JOURNEY</span>
+              <h2 id="form-title">Add a commute</h2>
+            </div>
+            <span class="panel-badge">01</span>
+          </div>
+          <p class="muted tight">Use your actual experience, not a predicted arrival.</p>
+          <form id="commute-form">
+            <div class="field">
+              <label for="route">Route / journey label <span class="required">*</span></label
+              ><input
+                id="route"
+                name="route"
+                required
+                maxlength="70"
+                placeholder="e.g. Red Line → Orange Line"
+                autocomplete="off"
+              /><small>A name you can use to compare similar trips</small>
+            </div>
+            <div class="field">
+              <label for="date">Date of journey <span class="required">*</span></label
+              ><input type="date" id="date" name="date" required />
+            </div>
+            <div class="field-grid">
+              <div class="field">
+                <label for="expectedMinutes"
+                  >Planned time (min) <span class="required">*</span></label
+                ><input
+                  type="number"
+                  id="expectedMinutes"
+                  name="expectedMinutes"
+                  min="1"
+                  max="480"
+                  step="1"
+                  required
+                  placeholder="35"
+                />
+              </div>
+              <div class="field">
+                <label for="actualMinutes">Actual time (min) <span class="required">*</span></label
+                ><input
+                  type="number"
+                  id="actualMinutes"
+                  name="actualMinutes"
+                  min="1"
+                  max="480"
+                  step="1"
+                  required
+                  placeholder="46"
+                />
+              </div>
+            </div>
+            <div class="field">
+              <label for="delayReason">Primary reason <span class="required">*</span></label
+              ><select name="delayReason" id="delayReason" required>
+                <option>No delay</option>
+                <option>Traffic</option>
+                <option>Late vehicle</option>
+                <option>Crowding</option>
+                <option>Weather</option>
+                <option>Missed connection</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="notes">Your notes <span class="optional">optional</span></label
+              ><textarea
+                name="notes"
+                id="notes"
+                rows="3"
+                maxlength="600"
+                placeholder="What made this trip different?"
+              ></textarea>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="button primary" id="save-commute">
+                Save commute <span aria-hidden="true">→</span></button
+              ><button type="button" class="button ghost" id="cancel-commute" hidden>
+                Cancel edit
+              </button>
+            </div>
+            <p class="form-hint">
+              Your records stay private to this browser's anonymous ID. Clearing browser cookies may
+              make them inaccessible.
+            </p>
+          </form>
+        </section>
+        <div class="right-stack">
+          <section class="panel chart-panel" aria-labelledby="chart-heading">
+            <div class="panel-heading">
+              <div>
+                <span class="section-kicker">THE WEEK AT A GLANCE</span>
+                <h2 id="chart-heading">Where delays happen</h2>
+              </div>
+            </div>
+            <p class="muted tight">
+              Average positive delay by weekday across your recorded journeys.
+            </p>
+            <div
+              id="week-chart"
+              class="week-chart"
+              role="img"
+              aria-label="Average delay chart by weekday"
+            >
+              <p class="muted">Add a trip to see your delay pattern.</p>
+            </div>
+          </section>
+          <section class="panel method-panel">
+            <div class="method-icon">✳</div>
+            <div>
+              <h3>How your buffer is calculated</h3>
+              <p>
+                We take the 80th percentile of your recorded positive delays and round up to 5
+                minutes. A suggestion appears after three trips. This is a historical guide, not a
+                live prediction.
+              </p>
+            </div>
+          </section>
+        </div>
+      </div>
+      <section class="panel records-panel" aria-labelledby="history-title">
+        <div class="records-header">
+          <div>
+            <span class="section-kicker">YOUR LOGBOOK</span>
+            <h2 id="history-title">Commute history</h2>
+          </div>
+          <div class="filters">
+            <label class="sr-only" for="filter-route">Filter commute route</label
+            ><input id="filter-route" placeholder="Search routes" maxlength="70" /><label
+              class="sr-only"
+              for="filter-day"
+              >Filter by weekday</label
+            ><select id="filter-day">
+              <option value="">Any day</option>
+              <option>Mon</option>
+              <option>Tue</option>
+              <option>Wed</option>
+              <option>Thu</option>
+              <option>Fri</option>
+              <option>Sat</option>
+              <option>Sun</option></select
+            ><button class="button subtle" type="button" id="clear-filters">Reset</button>
+          </div>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Journey</th>
+                <th scope="col">Date</th>
+                <th scope="col">Planned / Actual</th>
+                <th scope="col">Delay</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="commute-rows">
+              <tr>
+                <td colspan="5">Loading your commutes…</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="pagination">
+          <span id="commute-pagination-label"></span>
+          <div>
+            <button type="button" id="commute-prev" class="button subtle">← Previous</button
+            ><button type="button" id="commute-next" class="button subtle">Next →</button>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <span
+          >© 2026 RideTrace Boston · Built by Manoj Harridoss &amp; Kavya Kusuma Reddy Korem</span
+        ><a href="/guide.html">About data &amp; privacy</a>
+      </div>
+    </footer>
+  </body>
+</html>

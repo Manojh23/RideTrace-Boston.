@@ -1,0 +1,12 @@
+node_modules/
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+coverage/
+# Local imports and database files
+data/
+*.zip
+*.pem
+*.key

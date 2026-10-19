@@ -1,0 +1,6 @@
+node_modules/
+coverage/
+public/assets/*.svg
+public/assets/*.png
+docs/mockups/*.svg
+docs/mockups/*.png
