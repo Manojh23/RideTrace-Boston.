@@ -3,7 +3,10 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { attachVisitor } from './auth/visitor.js';
 import { commuteRoutes } from './features/manoj/commutes.js';
+import { transferRoutes } from './features/kavya/transfers.js';
 import { stopRoutes } from './routes/stops.js';
+import { getConfig } from './config.js';
+import { connectDatabase } from './db/connection.js';
 
 const publicDirectory = join(dirname(fileURLToPath(import.meta.url)), '..', 'public');
 
@@ -21,14 +24,19 @@ export function createApp(db, config) {
     );
     next();
   });
-  // Establish the signed browser identity on the initial HTML response, before parallel API requests.
+  app.use('/api', (_req, res, next) => {
+    res.setHeader('Cache-Control', 'private, no-store');
+    next();
+  });
   app.use(attachVisitor(config.secret, config.production));
   app.use(express.json({ limit: '15kb' }));
+  app.get('/api/session', (_req, res) => res.json({ status: 'ready' }));
   app.get('/api/health', async (_req, res) => {
     await db.command({ ping: 1 });
     res.json({ status: 'ok', service: 'RideTrace Boston' });
   });
   app.use('/api/commutes', commuteRoutes(db, express.Router));
+  app.use('/api/transfers', transferRoutes(db, express.Router));
   app.use('/api/stops', stopRoutes(db, express.Router));
   app.use(
     express.static(publicDirectory, {
@@ -46,3 +54,22 @@ export function createApp(db, config) {
   });
   return app;
 }
+
+// Vercel imports this app; local development still uses src/server.js.
+let hostedApp;
+const deploymentApp = express();
+deploymentApp.disable('x-powered-by');
+deploymentApp.use(async (req, res, next) => {
+  try {
+    if (!hostedApp) {
+      const config = getConfig();
+      const db = await connectDatabase(config.mongoUri, config.dbName);
+      hostedApp ||= createApp(db, config);
+    }
+    hostedApp(req, res, next);
+  } catch {
+    res.setHeader('Cache-Control', 'private, no-store');
+    res.status(503).json({ error: 'Service is temporarily unavailable. Please try again.' });
+  }
+});
+export default deploymentApp;

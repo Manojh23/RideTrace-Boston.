@@ -1,8 +1,25 @@
+let sessionReady;
+
+async function ensureSession() {
+  sessionReady ||= fetch('/api/session', { credentials: 'same-origin', cache: 'no-store' })
+    .then((response) => {
+      if (!response.ok) throw new Error('Could not start a browser session. Please try again.');
+    })
+    .catch((error) => {
+      sessionReady = undefined;
+      throw error;
+    });
+  await sessionReady;
+}
+
 export async function api(path, options = {}) {
   let response;
   try {
+    // Static hosting may serve HTML without running the cookie middleware.
+    await ensureSession();
     response = await fetch(`/api${path}`, {
       credentials: 'same-origin',
+      cache: 'no-store',
       headers: { 'Content-Type': 'application/json' },
       ...options,
     });

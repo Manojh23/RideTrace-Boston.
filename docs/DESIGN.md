@@ -1,94 +1,120 @@
-# Design Document — RideTrace Boston
+# RideTrace Boston — Design Document
 
 **Team:** Manoj Harridoss and Kavya Kusuma Reddy Korem  
-**Project:** RideTrace Boston — Understand commute delays and make more reliable transit connections.  
-**Status:** Implemented in source; screens below are illustrative design mockups, not live application screenshots.
+**Course:** Northeastern University Web Development — Project 2  
+**Date:** October 19, 2026
 
-## Project description and justification
+## 1. Project description
 
-RideTrace Boston is a practical personal-and-community web application for MBTA riders who want more context than real-time predictions alone. Riders record how long their commutes were expected to take versus the actual time, and the application reveals historical weekday delay patterns, on-time percentages, and a transparent departure-buffer suggestion. Independently, users publish unverified transfer experiences so others can compare reported transfer times by interchange stop, connecting route, and time of day. The features solve different problems and use separate CRUD collections; neither feature depends on the other teammate's implementation. A shared read-only MBTA GTFS stop catalog helps users find stop names, while all statistics remain explicitly historical rather than official forecasts.
+RideTrace Boston helps MBTA riders understand their commute delays and share transfer experiences. Riders can save planned and actual travel times in a private dashboard and review delay patterns by weekday. A separate public board lets riders share and search reports about connections between routes. The app uses official MBTA stop data for stop-name suggestions. These tools provide historical information rather than live arrival predictions.
 
-## User personas
+Manoj’s feature answers, “How much extra time do my trips usually need?” Kavya’s feature answers, “What have other riders experienced at this connection?” Reports are self-reported and unverified.
 
-- **Maya, a student commuter:** Maya rides the T to university several days a week. She consults arrival apps but still cannot tell how many extra minutes recurring delays may cost. She wants to log journeys, compare them with her planned times, and plan with a personal buffer.
-- **Daniel, a bus-and-train commuter:** Daniel sometimes misses transfers because the walk or platform wait was longer than he expected. He wants to see other riders' recent experiences with particular connecting routes and share observations of his own.
+## 2. User personas
 
-## User stories, implementation ownership and acceptance criteria
+These are fictional riders used to guide the design.
 
-### Manoj — `commuteLogs`
+### Maya — student commuter
 
-1. **As Maya, I want to create a commute log** with route, date, expected minutes, actual minutes, delay reason, and notes **so I can track journey reliability.**  
-   _Acceptance:_ A validated form creates a document via an Express POST route and immediately refreshes the private history.
-2. **As Maya, I want to browse, filter, edit and delete commute logs** by route and weekday **so I can maintain an accurate history.**  
-   _Acceptance:_ Pagination/filtering work, editing saves changes, deletion confirms, and a different browser cannot read or modify private logs.
-3. **As Maya, I want average delays, on-time percentage, weekday patterns and a suggested departure buffer** based on my entries **so I can decide when to leave.**  
-   _Acceptance:_ Statistics reflect only my entries, show empty states, and with fewer than three logs no buffer is asserted.
+- **Situation:** Takes the T to university several mornings each week.
+- **Problem:** Her journey often takes longer than planned, making it hard to decide when to leave.
+- **Goal:** Track delays and use her own history to plan a time buffer.
+- **Needs:** A quick entry form, private records, and clear statistics.
 
-### Kavya — `transferReports`
+**Example:** Maya plans a 35-minute trip that takes 46 minutes. She records it after class. After several journeys, she checks weekday patterns and the suggested buffer. If she entered the wrong duration, she can edit the record.
 
-4. **As Daniel, I want to submit, browse and filter transfer reports** by interchange stop, connecting routes and time of day, including actual transfer minutes, missed connections and notes, **so I can share experiences and plan transfers.**  
-   _Acceptance:_ A validated form publishes a public report; filters, date labels, typical transfer median, and missed-connection percentage match the submitted data.
-5. **As Daniel, I want to edit or delete my own reports** **so I can correct outdated information.**  
-   _Acceptance:_ Author-only controls appear for original browser and server routes reject edits or deletes from another browser.
+### Daniel — connecting-route commuter
 
-> The combined user story #4 preserves the previously discussed create + browse/filter functionality. The work remains separate across teammates: commute logs never query transferReports; transfer reports never query commuteLogs.
+- **Situation:** Uses buses and trains and sometimes makes unfamiliar transfers.
+- **Problem:** A connection may involve more walking or waiting than he expected.
+- **Goal:** Find relevant rider reports and share his own experience.
+- **Needs:** Filters for stop, routes, and time of day; report dates; and clear ownership controls.
 
-## Architecture and data design
+**Example:** Daniel searches for evening Red-to-Orange transfers at Downtown Crossing. After his trip, he posts the time it took and whether he missed the connection. He can later correct or delete his report in the same browser.
 
-```
-Browser (HTML5, CSS modules, Vanilla ES6 modules, Fetch)
-   |-- /commutes.html --> /api/commutes --> MongoDB: commuteLogs (private, Manoj)
-   |-- /transfers.html --> /api/transfers --> MongoDB: transferReports (public, Kavya)
-   |-- stops autocomplete --> /api/stops --> MongoDB: mbtaStops (read-only)
-                                        ^
-                     official MBTA GTFS static ZIP importer (one-time script)
-```
+## 3. User stories
 
-- **Browser identity:** 16 random bytes identified by a signed HMAC cookie, HttpOnly and SameSite=Lax (Secure when NODE_ENV=production). Ownership restrictions are checked on the server, not via UI alone. The anonymous model has no recovery mechanism after cookie loss.
-- **Commute document:** `_id`, `ownerId`, `route`, `date`, `expectedMinutes`, `actualMinutes`, `delayReason`, `notes`, `createdAt`, `updatedAt`.
-- **Transfer document:** `_id`, `ownerId`, `stopName`, `fromRoute`, `toRoute`, `observedAt`, `daypart`, `transferMinutes`, `missedConnection`, `notes`, `createdAt`, `updatedAt`.
-- **Stop document:** `stopId`, `stopName`, `locationType`, `parentStation`, `latitude`, `longitude` (from MBTA GTFS). The catalog is read-only to web users and refreshed only via the seed script.
-- **Technology:** Node ES modules, Express, MongoDB native Node driver, Fetch API and Vanilla JavaScript DOM rendering. The backend does not use `require`, Mongoose, React, or template engines.
+### Manoj — Commute Reliability Dashboard
 
-## Usability and UI decisions
+- **M1:** As Maya, I want to save my route, date, planned and actual minutes, delay reason, and notes so I can track my journeys.
+- **M2:** As Maya, I want to browse, filter, edit, and delete my logs so my private history stays accurate.
+- **M3:** As Maya, I want delay statistics, weekday patterns, and a buffer estimate so I can plan when to leave.
 
-- Required and optional fields explicitly labeled; proper `input`, `select`, `textarea`, `button` and `table` elements.
-- Clear information architecture: Overview, My commutes, Transfer board, How it works.
-- Search, filtering, pagination, inline notices, validation errors, edit cancellation, deletion confirmation.
-- Data designed for screen readers with semantic headings, `aria-live` notices, field labels, and keyboard focus states.
-- Phone/tablet layouts adapt to small widths; no third-party frontend library needed.
-- No false real-time arrival claims; reports prominently marked unverified and >30-day observations labeled old.
+| Story | Expected behavior                                                                                                                                                         |
+| ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| M1    | Valid entries are saved in MongoDB and remain after refresh. Required fields and invalid durations are checked.                                                           |
+| M2    | Route and weekday filters narrow the history. Edits and deletions update the records. Pagination handles the last page. Another browser cannot read or change these logs. |
+| M3    | Statistics use the owner’s journeys. The buffer appears after at least three logs and is explained in the interface.                                                      |
 
-## Design mockups
+### Kavya — Transfer Experience Board
 
-These PNGs are **planning illustrations containing example data**; they are not deployed screenshots. Their concepts correspond to actual HTML/CSS pages delivered in `public/`.
+- **K1:** As Daniel, I want to publish a transfer report with stop, routes, date, time of day, duration, and notes so other riders can learn from it.
+- **K2:** As Daniel, I want to filter public reports by stop, routes, and time of day so I can find relevant connections.
+- **K3:** As Daniel, I want to edit or delete my own reports so I can correct mistakes or remove an entry.
+
+| Story | Expected behavior                                                                                                                     |
+| ----- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| K1    | Valid reports are saved in MongoDB and appear publicly. MBTA stop suggestions are available after importing the catalog.              |
+| K2    | Filters update the feed and matching statistics. Reports show dates, transfer times, and unverified labels. Older reports are marked. |
+| K3    | Only the originating browser sees owner controls. The backend also checks ownership for updates and deletions.                        |
+
+### Feature ownership
+
+| Owner | Frontend        | Backend               | Collection        |
+| ----- | --------------- | --------------------- | ----------------- |
+| Manoj | `public/manoj/` | `src/features/manoj/` | `commuteLogs`     |
+| Kavya | `public/kavya/` | `src/features/kavya/` | `transferReports` |
+
+Each teammate’s feature includes its own frontend, API routes, validation, statistics, and CRUD operations. The features share the server, database connection, browser identity, and common styles. Neither feature reads or writes the other feature’s editable collection. The `mbtaStops` collection is a shared, read-only reference catalog.
+
+## 4. Design mockups
+
+The boards show simplified wireframes beside interface pictures. The overview uses a concept image; the two feature boards use Manoj’s local screenshots with test entries. The mobile board shows the planned layout rather than a tested phone capture.
 
 ### Overview
 
-![Overview interface concept](mockups/overview-concept.png)
+![Overview wireframe and interface concept](mockups/overview-wireframe.png)
 
-### Manoj — Commute dashboard
+The home page explains the app and links directly to either feature. Shared navigation also links to the usage guide.
 
-![Commute dashboard interface concept](mockups/commutes-concept.png)
+### Manoj’s commute dashboard
 
-### Kavya — Transfer board
+![Commute dashboard wireframe and local screenshot](mockups/commutes-wireframe.png)
 
-![Transfer board interface concept](mockups/transfers-concept.png)
+The page places private-history information and summary cards first. Below them are the entry form, weekday chart, buffer explanation, and history table. The history includes filters and Edit/Delete controls.
 
-## Limitations and scope
+### Kavya’s transfer board
 
-RideTrace is not a timetable, live journey planner, MBTA disruption service or verified safety information. Statistics describe historical, self-reported data and can be misleading if few or unrepresentative records exist. Public transfer reports may be inaccurate and should not be used as official accessibility guidance. The MBTA dataset's license/attribution conditions are separate from the MIT license applied to application code. User authentication is intentionally anonymous to avoid additional external libraries and account complexity; cookie loss prevents recovery of owned entries.
+![Transfer board wireframe and local screenshot](mockups/transfers-wireframe.png)
 
-## Testing strategy and acceptance checklist
+The page shows the unverified-report notice and statistics above the form and public feed. Entry fields and feed filters are separate. Reports show dates, routes, durations, and owner controls where allowed.
 
-1. Run `npm test` and syntax checks for statistical calculations, validation, CSV/ZIP parsing, anonymous visitor cookies.
-2. With MongoDB running, create two browser sessions; verify each sees only its own commute logs; test cross-session edit/delete returns 404.
-3. Verify transfer reports are publicly readable but editing/deleting remains owner-only.
-4. Create, update, search/filter, paginate and delete records on both modules.
-5. Run GTFS importer and confirm `db.mbtaStops.countDocuments()` is **over 1,000**.
-6. Run `npm run lint` and `npm run format:check` after installing dependencies.
-7. Check keyboard and mobile layout on real browsers, deploy publicly, verify URL, record narrated demonstration, and complete required instructor review.
+### Mobile layout
 
-## Attribution / AI disclosure
+![Mobile wireframes for both features](mockups/mobile-wireframe.png)
 
-Data courtesy MBTA / MassDOT (https://cdn.mbta.com/MBTA_GTFS.zip). Generative AI assisted with proposal refinement, code generation, design-document preparation, and tests. Manoj and Kavya should independently review, explain, test and own the submitted work.
+On narrower screens, the workspace stacks vertically and navigation wraps. Form fields become one column on small phones. The commute table can scroll inside its panel, and long report text wraps. These are layout goals; real mobile testing has not been recorded.
+
+### Common design choices
+
+- Navy headings and teal buttons give both features the same visual style.
+- Separate panels distinguish entry forms, statistics, and saved records.
+- Labels include units and identify required fields.
+- Standard buttons, forms, links, and tables support normal browser behavior.
+- Text notices explain saved changes, errors, privacy, and unverified reports.
+
+[Image sources and captions](mockups/README.md)
+
+## 5. Technical notes
+
+The frontend uses HTML, CSS, and vanilla JavaScript ES modules. Fetch requests exchange JSON with Express routes. The backend uses the native MongoDB driver.
+
+Commute history uses a signed anonymous browser cookie. Losing that cookie can make old private records inaccessible. Transfer reports remain public, while edits and deletions require the original browser identity.
+
+The buffer is the nearest-rank 80th percentile of non-negative commute delays, rounded up to five minutes, after at least three logs. Transfer statistics use the median duration and percentage of missed connections. Statistics analyze up to 2,500 matching records.
+
+## 6. Sources
+
+Stop data is from [MBTA / MassDOT](https://cdn.mbta.com/MBTA_GTFS.zip). The app is independent of the MBTA. Application code uses the MIT license.
+
+[AI-use disclosure](../README.md#ai-use-disclosure)
