@@ -37,9 +37,10 @@ class Element {
   }
 }
 
-async function checkLastPageDeletion() {
-  const endpoint = 'commutes';
-  const pageSize = 8;
+async function checkLastPageDeletion(feature) {
+  const commute = feature === 'manoj';
+  const endpoint = commute ? 'commutes' : 'transfers';
+  const pageSize = commute ? 8 : 6;
   const elements = new Map();
   const get = (id) => {
     if (!elements.has(id)) elements.set(id, new Element());
@@ -52,6 +53,14 @@ async function checkLastPageDeletion() {
     expectedMinutes: 20,
     actualMinutes: 25,
     delayReason: 'Traffic',
+    stopName: 'Park Street',
+    fromRoute: 'Red',
+    toRoute: 'Green',
+    observedAt: '2026-09-01',
+    daypart: 'Morning',
+    transferMinutes: 8,
+    missedConnection: false,
+    isMine: true,
     notes: '',
   }));
   const requestedPages = [];
@@ -93,13 +102,13 @@ async function checkLastPageDeletion() {
     };
   };
   try {
-    const file = '../public/manoj/commutes.js';
+    const file = commute ? '../public/manoj/commutes.js' : '../public/kavya/transfers.js';
     await import(new URL(file, import.meta.url));
-    const prefix = 'commute';
+    const prefix = commute ? 'commute' : 'transfer';
     get(`${prefix}-next`).click();
     await new Promise((resolve) => setImmediate(resolve));
     assert.match(get(`${prefix}-pagination-label`).textContent, /Page 2 of 2/);
-    const holder = get('commute-rows');
+    const holder = get(commute ? 'commute-rows' : 'transfer-feed');
     const deleteButtons = holder.buttons('Delete');
     assert.equal(deleteButtons.length, 1);
     await deleteButtons[0].click();
@@ -118,5 +127,9 @@ async function checkLastPageDeletion() {
 }
 
 test('commute history returns to a valid page after its final-page record is deleted', async () => {
-  await checkLastPageDeletion();
+  await checkLastPageDeletion('manoj');
+});
+
+test('transfer board returns to a valid page after its final-page report is deleted', async () => {
+  await checkLastPageDeletion('kavya');
 });

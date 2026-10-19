@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Community-submitted MBTA transfer experience board." />
+    <title>Transfer experiences · RideTrace Boston</title>
+    <link rel="icon" href="/assets/icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/css/base.css" />
+    <link rel="stylesheet" href="/kavya/transfers.css" />
+    <script type="module" src="/kavya/transfers.js"></script>
+  </head>
+  <body>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <header class="site-header">
+      <a class="brand" href="/"
+        ><span class="brand-icon" aria-hidden="true">↗</span
+        ><span>RideTrace<span class="brand-light"> Boston</span></span></a
+      >
+      <nav aria-label="Main navigation" class="nav-links">
+        <a href="/">Overview</a><a href="/manoj/">My commutes</a
+        ><a aria-current="page" href="/kavya/">Transfer board</a
+        ><a href="/guide.html">How it works</a>
+      </nav>
+      <a class="header-cta" href="/manoj/">My commutes ↗</a>
+    </header>
+    <main class="container inner-main" id="main">
+      <div class="page-heading">
+        <div>
+          <div class="eyebrow">RIDER-SHARED KNOWLEDGE / KAVYA'S FEATURE</div>
+          <h1>Make the <span>connection.</span></h1>
+          <p>Real transfer experiences, shared by riders who have been there.</p>
+        </div>
+        <span class="community-pill">⇄ Community-powered</span>
+      </div>
+      <div id="notice" role="status" aria-live="polite" class="notice" hidden></div>
+      <div class="disclaimer" role="note">
+        <strong>Rider reports are unverified.</strong> Details and travel conditions can change. Use
+        the
+        <a href="https://www.mbta.com/" target="_blank" rel="noopener noreferrer">official MBTA</a>
+        for up-to-date travel information.
+      </div>
+      <section class="stats-grid" aria-label="Transfer report summary">
+        <article class="stat-card">
+          <span class="stat-label">MATCHING REPORTS</span><strong id="stat-count">—</strong
+          ><span class="stat-sub">Submitted rider experiences</span>
+        </article>
+        <article class="stat-card">
+          <span class="stat-label">TYPICAL TRANSFER</span
+          ><strong><span id="stat-median">—</span><small> min</small></strong
+          ><span class="stat-sub">Median reported time</span>
+        </article>
+        <article class="stat-card">
+          <span class="stat-label">MISSED CONNECTIONS</span
+          ><strong><span id="stat-missed">—</span><small>%</small></strong
+          ><span class="stat-sub">Of matching reports</span>
+        </article>
+        <article class="stat-card highlighted-stat">
+          <span class="stat-label">RECENT REPORTS</span><strong id="stat-recent">—</strong
+          ><span class="stat-sub">Experiences dated within 30 days</span>
+        </article>
+      </section>
+      <div class="workspace-grid transfer-workspace">
+        <section class="panel form-panel" aria-labelledby="transfer-form-heading">
+          <div class="panel-heading">
+            <div>
+              <span class="section-kicker">CONTRIBUTE TO THE BOARD</span>
+              <h2 id="transfer-form-heading">Share an experience</h2>
+            </div>
+            <span class="panel-badge">02</span>
+          </div>
+          <p class="muted tight">Help another rider understand what a connection really takes.</p>
+          <form id="transfer-form">
+            <div class="field">
+              <label for="stopName">Interchange stop <span class="required">*</span></label
+              ><input
+                id="stopName"
+                name="stopName"
+                list="stop-suggestions"
+                required
+                maxlength="110"
+                placeholder="e.g. Downtown Crossing"
+                autocomplete="off"
+              /><datalist id="stop-suggestions"></datalist
+              ><small>Type a stop name; MBTA suggestions appear after importing GTFS data.</small>
+            </div>
+            <div class="field-grid">
+              <div class="field">
+                <label for="fromRoute">From route <span class="required">*</span></label
+                ><input
+                  id="fromRoute"
+                  name="fromRoute"
+                  required
+                  maxlength="70"
+                  placeholder="Red Line"
+                />
+              </div>
+              <div class="field">
+                <label for="toRoute">To route <span class="required">*</span></label
+                ><input
+                  id="toRoute"
+                  name="toRoute"
+                  required
+                  maxlength="70"
+                  placeholder="Orange Line"
+                />
+              </div>
+            </div>
+            <div class="field-grid">
+              <div class="field">
+                <label for="observedAt">Date of transfer <span class="required">*</span></label
+                ><input id="observedAt" name="observedAt" type="date" required />
+              </div>
+              <div class="field">
+                <label for="daypart">Time of day <span class="required">*</span></label
+                ><select id="daypart" name="daypart" required>
+                  <option>Morning</option>
+                  <option>Afternoon</option>
+                  <option>Evening</option>
+                  <option>Night</option>
+                </select>
+              </div>
+            </div>
+            <div class="field-grid">
+              <div class="field">
+                <label for="transferMinutes"
+                  >Transfer time (min) <span class="required">*</span></label
+                ><input
+                  type="number"
+                  id="transferMinutes"
+                  name="transferMinutes"
+                  min="1"
+                  max="180"
+                  step="1"
+                  required
+                  placeholder="8"
+                />
+              </div>
+              <div class="field inline-checkbox">
+                <label
+                  ><input type="checkbox" id="missedConnection" name="missedConnection" /> Missed
+                  connection</label
+                >
+              </div>
+            </div>
+            <div class="field">
+              <label for="notes">Helpful notes <span class="optional">optional</span></label
+              ><textarea
+                id="notes"
+                name="notes"
+                rows="3"
+                maxlength="600"
+                placeholder="Crowded escalator, longer walk, where to change…"
+              ></textarea>
+            </div>
+            <div class="form-actions">
+              <button class="button primary" id="save-transfer" type="submit">
+                Publish report <span aria-hidden="true">→</span></button
+              ><button type="button" class="button ghost" id="cancel-transfer" hidden>
+                Cancel edit
+              </button>
+            </div>
+            <p class="form-hint">
+              Public, unverified community reports. Avoid names, personal details, and
+              safety-critical claims. Only this browser can edit your submission.
+            </p>
+          </form>
+        </section>
+        <section class="panel feed-panel" aria-labelledby="feed-heading">
+          <div class="feed-head">
+            <div>
+              <span class="section-kicker">COMMUNITY FEED</span>
+              <h2 id="feed-heading">Transfer reports</h2>
+            </div>
+            <span class="unverified-tag">● Unverified</span>
+          </div>
+          <form id="transfer-filters" class="transfer-filters" aria-label="Filter transfer reports">
+            <div class="field">
+              <label for="filter-stop">Interchange stop</label
+              ><input id="filter-stop" placeholder="Search stop" maxlength="110" />
+            </div>
+            <div class="field-grid">
+              <div class="field">
+                <label for="filter-from">From route</label
+                ><input id="filter-from" placeholder="e.g. Red" maxlength="70" />
+              </div>
+              <div class="field">
+                <label for="filter-to">To route</label
+                ><input id="filter-to" placeholder="e.g. Orange" maxlength="70" />
+              </div>
+            </div>
+            <div class="filter-last">
+              <div class="field">
+                <label for="filter-daypart">Time of day</label
+                ><select id="filter-daypart">
+                  <option value="">Any time</option>
+                  <option>Morning</option>
+                  <option>Afternoon</option>
+                  <option>Evening</option>
+                  <option>Night</option>
+                </select>
+              </div>
+              <button type="submit" class="button secondary">Apply filters</button
+              ><button type="button" id="clear-transfer-filters" class="button subtle">
+                Reset
+              </button>
+            </div>
+          </form>
+          <div id="transfer-feed" class="transfer-feed" aria-live="polite">
+            <p class="muted">Loading rider experiences…</p>
+          </div>
+          <div class="pagination">
+            <span id="transfer-pagination-label"></span>
+            <div>
+              <button type="button" id="transfer-prev" class="button subtle">← Previous</button
+              ><button type="button" id="transfer-next" class="button subtle">Next →</button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <span
+          >© 2026 RideTrace Boston · Built by Manoj Harridoss &amp; Kavya Kusuma Reddy Korem</span
+        ><span
+          >MBTA stop data © MBTA / MassDOT ·
+          <a href="https://cdn.mbta.com/MBTA_GTFS.zip">GTFS source</a></span
+        >
+      </div>
+    </footer>
+  </body>
+</html>

@@ -40,7 +40,7 @@ test('concurrent initialization shares one client and creates indexes once', asy
       results.every((value) => value === db),
       true,
     );
-    assert.equal(indexes, 2);
+    assert.equal(indexes, 4);
     assert.equal(await connectDatabase('mongodb://localhost', 'test'), db);
     assert.equal(connections, 1);
   } finally {

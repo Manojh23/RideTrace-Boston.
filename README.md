@@ -9,18 +9,18 @@ A web app for tracking MBTA commute delays and sharing transfer experiences.
 
 ## Project objective
 
-RideTrace helps riders compare planned and actual travel times and learn from other riders’ transfers. This branch includes Manoj’s commute dashboard. Kavya’s transfer board is supplied separately for her pull request:
+RideTrace helps riders compare planned and actual travel times and learn from other riders’ transfers. It has two separate full-stack features:
 
 - **Manoj’s commute dashboard:** private journey logs, route and weekday filters, delay statistics, and a suggested departure buffer.
-- **Kavya’s planned transfer board:** public transfer reports, stop/route/time filters, median transfer times, and owner-only editing and deletion.
+- **Kavya’s transfer board:** public transfer reports, stop/route/time filters, median transfer times, and owner-only editing and deletion.
 
-The app uses Node.js, Express, the native MongoDB driver, and vanilla JavaScript ES modules. The commute feature uses `commuteLogs`. The planned transfer feature uses its own collection and shares the server and database connector.
+The app uses Node.js, Express, the native MongoDB driver, and vanilla JavaScript ES modules. Both features share the server and database connection but use separate editable collections.
 
 ## Screenshot
 
-Commute dashboard wireframe with a local page screenshot.
+Local transfer page showing imported MBTA stop suggestions. The visible reports are test entries.
 
-![Commute dashboard and local screenshot](docs/mockups/commutes-wireframe.png)
+![Transfer form with MBTA stop suggestions](docs/screenshots/transfers-live.png)
 
 ## Design document
 
@@ -71,11 +71,12 @@ The importer downloads [MBTA GTFS data](https://cdn.mbta.com/MBTA_GTFS.zip), che
 
 ## Using the app
 
-| Page         | Address                          | Main actions                                  |
-| ------------ | -------------------------------- | --------------------------------------------- |
-| Overview     | http://localhost:3000/           | Open either feature                           |
-| My commutes  | http://localhost:3000/manoj/     | Add, filter, edit, or delete private journeys |
-| How it works | http://localhost:3000/guide.html | Read calculation and privacy details          |
+| Page           | Address                          | Main actions                                            |
+| -------------- | -------------------------------- | ------------------------------------------------------- |
+| Overview       | http://localhost:3000/           | Open either feature                                     |
+| My commutes    | http://localhost:3000/manoj/     | Add, filter, edit, or delete private journeys           |
+| Transfer board | http://localhost:3000/kavya/     | Browse reports, publish one, or change your own reports |
+| How it works   | http://localhost:3000/guide.html | Read calculation and privacy details                    |
 
 Commute history belongs to an anonymous browser identity stored in a signed cookie. Clearing cookies may make earlier records inaccessible. Transfer reports are public, but only the original browser can edit or delete them. Reports are unverified and are not live MBTA predictions.
 
@@ -83,13 +84,14 @@ The commute buffer uses the nearest-rank 80th percentile of non-negative delays,
 
 ## Project structure
 
-| Location                               | Contents                                                                                 |
-| -------------------------------------- | ---------------------------------------------------------------------------------------- |
-| `public/manoj/`, `src/features/manoj/` | Manoj’s HTML, CSS, JavaScript, API, validation, and statistics; `commuteLogs` collection |
-| `src/db/`, `src/auth/`, `src/lib/`     | Shared database connection, browser identity, and helpers                                |
-| `src/routes/stops.js`, `scripts/`      | Read-only `mbtaStops` lookup and GTFS importer                                           |
-| `tests/`                               | Validation, statistics, and frontend pagination tests                                    |
-| `docs/`                                | Design document, mockups, and screenshots                                                |
+| Location                               | Contents                                                                                     |
+| -------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `public/manoj/`, `src/features/manoj/` | Manoj’s HTML, CSS, JavaScript, API, validation, and statistics; `commuteLogs` collection     |
+| `public/kavya/`, `src/features/kavya/` | Kavya’s HTML, CSS, JavaScript, API, validation, and statistics; `transferReports` collection |
+| `src/db/`, `src/auth/`, `src/lib/`     | Shared database connection, browser identity, and helpers                                    |
+| `src/routes/stops.js`, `scripts/`      | Read-only `mbtaStops` lookup and GTFS importer                                               |
+| `tests/`                               | Validation, statistics, and frontend pagination tests                                        |
+| `docs/`                                | Design document, mockups, and screenshots                                                    |
 
 ## Tests and formatting
 
@@ -97,7 +99,7 @@ The commute buffer uses the nearest-rank 80th percentile of non-negative delays,
 npm run verify
 ```
 
-This runs 21 tests, ESLint, and Prettier. Individual commands are `npm test`, `npm run lint`, and `npm run format:check`. Tests cover validation, statistics, pagination, session startup, connection reuse, and the hosted HTTP entry point. Automated tests use mock database and DOM implementations. Separate live checks confirmed database health, stop lookup, and commute creation and editing on Vercel. Manoj checked local CRUD and incognito behavior. The automated suite does not verify browser layout or complete live CRUD.
+This runs 25 tests, ESLint, and Prettier. Individual commands are `npm test`, `npm run lint`, and `npm run format:check`. Tests cover validation, statistics, pagination, session startup, connection reuse, and the hosted HTTP entry point. Automated tests use mock database and DOM implementations. Separate live checks confirmed database health, stop lookup, and commute creation and editing on Vercel. Manoj checked local CRUD and incognito behavior. The automated suite does not verify browser layout or complete live CRUD.
 
 ## Hosting
 
@@ -114,7 +116,7 @@ These variables are needed for both Production and Preview deployments. The Atla
 
 The production website is [RideTrace Boston](https://ridetrace-boston.vercel.app). Vercel hosts the app, and MongoDB Atlas stores its data. The database health check and stop lookup return successful responses. The local server still runs through `npm start`.
 
-The Atlas database is `ridetrace_boston`. Manoj’s feature uses `commuteLogs`, and the stop lookup uses `mbtaStops`. The transfer-board PR adds `transferReports`. Atlas contains 8,035 distinct official stop IDs. The importer updates records by stop ID, removes identical duplicates, and creates a unique stop-ID index.
+Both features use the same Atlas database, `ridetrace_boston`: Manoj uses `commuteLogs`, Kavya uses `transferReports`, and the shared stop lookup uses `mbtaStops`. Atlas contains 8,035 distinct official stop IDs. The importer updates records by stop ID, removes identical duplicates, and creates a unique stop-ID index.
 
 The current deployment was uploaded directly. Deployment is manual; GitHub pushes do not currently trigger a Vercel deployment.
 
