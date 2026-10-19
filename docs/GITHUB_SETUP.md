@@ -1,56 +1,37 @@
-# GitHub setup for Manoj + Kavya
+# Shared GitHub workflow
 
-**Recommended repository:** `Manojh23/RideTrace-Boston`, **Private** during coursework; one repo, two independent features.
+The existing private repository is `Manojh23/RideTrace-Boston.`. The final period is currently part of its name. Both teammates use this one repository; separate repositories are not required by the supplied project instructions.
 
-## Step 1 — create the repository
+## Test the integration branch
 
-On GitHub while signed in as `Manojh23`, open https://github.com/new.
-
-- Repository name: `RideTrace-Boston`
-- Description: `RideTrace Boston — MBTA Commute Reliability Dashboard and Transfer Experience Board. Web Development Project 2 by Manoj Harridoss and Kavya Kusuma Reddy Korem.`
-- Visibility: **Private** (can change later as required for course review).
-- **Do not** auto-add README, license, or .gitignore (included already).
-- Click **Create repository**.
-
-## Step 2 — push Manoj starter first
-
-Extract `RideTrace-Boston-Manoj-Starter.zip`, open a terminal **inside its `RideTrace-Boston/` folder**, then run:
+For a new local clone:
 
 ```bash
-git init -b main
-git add .
-git commit -m "Initial AI-assisted project starter: Manoj commute feature and shared infrastructure"
-git remote add origin https://github.com/Manojh23/RideTrace-Boston.git
-git push -u origin main
-```
-
-Authenticate using GitHub Credential Manager / GitHub CLI when prompted. Never paste passwords or tokens into chat.
-
-## Step 3 — invite Kavya
-
-After repository creation visit `https://github.com/Manojh23/RideTrace-Boston/settings/access`.
-Choose **Collaborators → Add people**, search for **`kavya-korem`**, grant **Write** access, and send the invitation. She must accept it. This step is not performed automatically by the ZIP.
-
-## Step 4 — Kavya integration
-
-Kavya can clone the repository and create a branch:
-
-```bash
-git clone https://github.com/Manojh23/RideTrace-Boston.git
+git clone --branch feature/kavya-transfers https://github.com/Manojh23/RideTrace-Boston..git RideTrace-Boston
 cd RideTrace-Boston
-git switch -c feature/kavya-transfers
+npm ci
 ```
 
-Extract `RideTrace-Boston-Kavya-Feature.zip` and copy the `src/features/kavya/`, `public/kavya/`, and `tests/kavya-transfers.test.js` paths into the cloned project, preserving the paths. Follow `INSTALL_KAVYA.md` in that ZIP to mount the router and enable navigation (or use the combined ZIP to inspect the fully integrated version). Kavya reviews/tests/improves the module, commits on her branch, pushes, and opens a PR:
+Create a local `.env` from `.env.example`, set a random `APP_SECRET`, and configure MongoDB. Follow the README to run the server and `docs/TESTING.md` to exercise both features. Never commit `.env` or imported data.
+
+## Review and merge
+
+Kavya's feature is submitted through PR #1. Manoj reviews the changes and verification results before merging. Use a normal merge commit to preserve both existing feature commits and add an integration commit. Merging is separate from CI passing.
+
+After the PR is merged, each teammate updates their local checkout:
 
 ```bash
-git add .
-git commit -m "Integrate transfer experience board"
-git push -u origin feature/kavya-transfers
+git fetch origin
+git switch main
+git pull --ff-only origin main
 ```
 
-Manoj reviews and merges the PR. After merging, the repository contains both independent parts.
+Create new branches for follow-up work, review shared infrastructure edits together, and retain truthful authorship and AI disclosure. The branch may contain the entire application while each teammate owns a different full-stack feature.
 
-## After push
+## Access and final submission
 
-Run `npm install`, configure `.env`, start MongoDB, import the official MBTA GTFS feed, run `npm run verify`, start the app, and verify both pages. Public deployment, demonstration video, final screenshot, and course submissions remain separate rubric deliverables.
+GitHub previously confirmed `kavya-korem` has Write access. Ensure the instructor can access the private source repository for assessment. A GitHub PR review does not replace the instructor's course code review.
+
+Deploy the app to a Node-compatible public host connected to MongoDB; GitHub Pages alone does not run this Express backend. Confirm production CRUD and import the MBTA catalog into the database actually used by the deployment.
+
+If the repository is renamed to remove the trailing period, update clone instructions and local remote URLs to match the new name.

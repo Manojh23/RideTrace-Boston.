@@ -1,4 +1,4 @@
-> **Staging notice:** This Manoj-first ZIP has only Manoj's feature integrated. See `STAGING_NOTE.md` and `docs/GITHUB_SETUP.md`. Transfer functionality is added by Kavya's branch.
+> **Integration status:** This branch includes both Manoj’s commute dashboard and Kavya’s transfer board. PR #1 integrates the transfer feature into `main`; its merge is a separate review step.
 
 # RideTrace Boston
 
@@ -16,13 +16,15 @@
 
 No React, Mongoose, CommonJS, template engines, or server-side rendering. The frontend is HTML/CSS/Vanilla JS ES modules using the Fetch API. Express and the native MongoDB Node driver power JSON APIs.
 
-## Design previews (illustrative, not live screenshots)
+## Running application screenshot
 
-The image below is a **design mockup with example numbers**, not evidence of a deployed/live database. It is included to document the planned interface. Once running locally, replace it with a real screenshot for the final course submission.
+This is an actual local-browser screenshot supplied by Manoj on October 19, 2026. It shows MBTA stop suggestions in the transfer entry form; any report values shown are user-entered test data. It is not evidence of public deployment.
 
-![Illustrative commute dashboard mockup](docs/mockups/commutes-concept.png)
+![Local transfer board with imported MBTA stop suggestions](docs/screenshots/transfers-live.png)
 
-Also see [home concept](docs/mockups/overview-concept.png), [transfer board concept](docs/mockups/transfers-concept.png), and the [full design document](docs/DESIGN.md).
+## Design mockups
+
+The [design document](docs/DESIGN.md) contains the [overview](docs/mockups/overview-concept.png), [commute dashboard](docs/mockups/commutes-concept.png), and [transfer board](docs/mockups/transfers-concept.png) concept mockups. These are planning illustrations with example data, distinct from the running-app screenshot above.
 
 ## Requirements
 
@@ -122,7 +124,11 @@ npm run format:check
 npm run verify
 ```
 
-The `eslint.config.js` file uses ESLint flat config, and `.prettierrc.json` provides Prettier settings. **Verification on 2026-10-19:** dependencies installed, all **11 unit tests** passed, all **19 JavaScript files** passed Node syntax checks, and ESLint and Prettier checks passed after setup corrections. These tests cover cookie signing, GTFS parsing, commute statistics, and input validation. MongoDB-backed CRUD, MBTA dataset import, browser forms, and public deployment have **not** been verified. Kavya's transfer feature is not included in this starter.
+The `eslint.config.js` file uses ESLint flat config, and `.prettierrc.json` provides Prettier settings. **Verification on 2026-10-19:** all **16 automated tests**, ESLint, Prettier, and syntax checks for all **25 JavaScript files** pass after the integration fixes. Two regression tests exercise the actual frontend modules with a minimal DOM and mock API, including deletion of the only record on the last page. These tests do not simulate CSS layout or a live MongoDB server.
+
+**Manoj’s local browser evidence:** create/read/update/delete, refresh persistence, displayed statistics, and private-commute/public-transfer behavior across normal and incognito windows were reported working. A terminal screenshot confirms **8,035 imported MBTA stop records**, and a browser screenshot confirms stop suggestions. This evidence is from Manoj’s local environment, not an independently repeated integration run here.
+
+**Still pending:** full filter/invalid-input coverage, real mobile/keyboard checks, public deployment and production-database verification, professor approval and course deliverables. See [testing instructions](docs/TESTING.md) and the [rubric audit](docs/RUBRIC_AUDIT.md).
 
 ## Production deployment
 

@@ -195,6 +195,9 @@ td .secondary-value {
   .week-chart {
     gap: 8px;
   }
+  .action-link {
+    min-height: 44px;
+  }
 }
 
 /* Fixed CSS bar heights avoid inline styles under the strict Content-Security-Policy. */

@@ -24,6 +24,9 @@
 * {
   box-sizing: border-box;
 }
+[hidden] {
+  display: none !important;
+}
 html {
   scroll-behavior: smooth;
 }
@@ -342,6 +345,11 @@ select:focus-visible {
   grid-template-columns: 405px minmax(0, 1fr);
   gap: 20px;
 }
+.workspace-grid > *,
+.field,
+.field-grid > * {
+  min-width: 0;
+}
 .form-panel {
   padding: 26px;
 }
@@ -393,7 +401,7 @@ select:focus-visible {
 }
 .field-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
 }
 .form-actions {
@@ -560,7 +568,7 @@ select:focus-visible {
     flex: 0 0 100%;
     justify-content: space-evenly;
     gap: 7px;
-    overflow: auto;
+    flex-wrap: wrap;
   }
   .nav-links a {
     font-size: 11px;
@@ -599,6 +607,27 @@ select:focus-visible {
   .form-panel {
     padding: 20px;
   }
+  .page-heading h1,
+  .page-heading p,
+  .eyebrow,
+  .stat-label,
+  .stat-sub {
+    overflow-wrap: anywhere;
+  }
+  .pagination,
+  .pagination > div {
+    flex-wrap: wrap;
+  }
+  .pagination .button {
+    min-height: 44px;
+  }
+  .field input,
+  .field select,
+  .field textarea,
+  .filters input,
+  .filters select {
+    font-size: 16px;
+  }
   .field-grid {
     gap: 8px;
   }
@@ -616,5 +645,18 @@ select:focus-visible {
   .guide-card,
   .guide-details {
     padding: 23px;
+  }
+}
+@media (max-width: 480px) {
+  .field-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .form-actions > .button {
+    flex: 1 1 auto;
+  }
+}
+@media (max-width: 360px) {
+  .stats-grid {
+    grid-template-columns: minmax(0, 1fr);
   }
 }

@@ -2,7 +2,7 @@
 
 **Team:** Manoj Harridoss and Kavya Kusuma Reddy Korem  
 **Project:** RideTrace Boston — Understand commute delays and make more reliable transit connections.  
-**Status:** Implemented in source; screens below are illustrative design mockups, not live application screenshots.
+**Status:** Both full-stack features are integrated on the PR branch. Screens below are illustrative design mockups; the README separately includes a real local-browser screenshot.
 
 ## Project description and justification
 
@@ -35,14 +35,13 @@ RideTrace Boston is a practical personal-and-community web application for MBTA 
 
 ## Architecture and data design
 
-```
-Browser (HTML5, CSS modules, Vanilla ES6 modules, Fetch)
-   |-- /commutes.html --> /api/commutes --> MongoDB: commuteLogs (private, Manoj)
-   |-- /transfers.html --> /api/transfers --> MongoDB: transferReports (public, Kavya)
-   |-- stops autocomplete --> /api/stops --> MongoDB: mbtaStops (read-only)
-                                        ^
-                     official MBTA GTFS static ZIP importer (one-time script)
-```
+| Frontend                              | JSON API         | MongoDB collection | Visibility                               |
+| ------------------------------------- | ---------------- | ------------------ | ---------------------------------------- |
+| `/manoj/`                             | `/api/commutes`  | `commuteLogs`      | Private to the signed browser identity   |
+| `/kavya/`                             | `/api/transfers` | `transferReports`  | Public reads; owner-only updates/deletes |
+| Stop suggestions in the transfer form | `/api/stops`     | `mbtaStops`        | Read-only reference catalog              |
+
+The shared Express application serves static HTML/CSS and JSON. The importer loads official MBTA GTFS stop data into the shared reference catalog. Neither feature reads the other feature's editable collection.
 
 - **Browser identity:** 16 random bytes identified by a signed HMAC cookie, HttpOnly and SameSite=Lax (Secure when NODE_ENV=production). Ownership restrictions are checked on the server, not via UI alone. The anonymous model has no recovery mechanism after cookie loss.
 - **Commute document:** `_id`, `ownerId`, `route`, `date`, `expectedMinutes`, `actualMinutes`, `delayReason`, `notes`, `createdAt`, `updatedAt`.
@@ -81,7 +80,7 @@ RideTrace is not a timetable, live journey planner, MBTA disruption service or v
 
 ## Testing strategy and acceptance checklist
 
-1. Run `npm test` and syntax checks for statistical calculations, validation, CSV/ZIP parsing, anonymous visitor cookies.
+1. Run `npm run verify` for the 16 automated tests, ESLint, and Prettier. The pagination regression tests verify both frontend modules recover after the last record on a final page is deleted; see `docs/TESTING.md`.
 2. With MongoDB running, create two browser sessions; verify each sees only its own commute logs; test cross-session edit/delete returns 404.
 3. Verify transfer reports are publicly readable but editing/deleting remains owner-only.
 4. Create, update, search/filter, paginate and delete records on both modules.

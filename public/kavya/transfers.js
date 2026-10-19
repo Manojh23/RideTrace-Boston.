@@ -182,6 +182,11 @@ async function loadReports() {
   try {
     const query = searchParams({ ...currentFilters(), page: state.page, limit: 6 });
     const response = await api(`/transfers?${query}`);
+    if (state.page > response.pages) {
+      state.page = response.pages;
+      return loadReports();
+    }
+    state.page = response.page;
     state.pages = response.pages;
     board.replaceChildren();
     if (!response.records.length)
