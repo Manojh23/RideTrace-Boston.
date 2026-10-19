@@ -3,6 +3,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { attachVisitor } from './auth/visitor.js';
 import { commuteRoutes } from './features/manoj/commutes.js';
+import { transferRoutes } from './features/kavya/transfers.js';
 import { stopRoutes } from './routes/stops.js';
 
 const publicDirectory = join(dirname(fileURLToPath(import.meta.url)), '..', 'public');
@@ -29,6 +30,7 @@ export function createApp(db, config) {
     res.json({ status: 'ok', service: 'RideTrace Boston' });
   });
   app.use('/api/commutes', commuteRoutes(db, express.Router));
+  app.use('/api/transfers', transferRoutes(db, express.Router));
   app.use('/api/stops', stopRoutes(db, express.Router));
   app.use(
     express.static(publicDirectory, {
