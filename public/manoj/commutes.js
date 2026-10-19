@@ -194,6 +194,11 @@ async function loadLogs() {
       limit: 8,
     });
     const data = await api(`/commutes?${params}`);
+    if (state.page > data.pages) {
+      state.page = data.pages;
+      return loadLogs();
+    }
+    state.page = data.page;
     state.records = data.records;
     state.pages = data.pages;
     renderLogs(data.records);

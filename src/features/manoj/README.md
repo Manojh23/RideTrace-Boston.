@@ -6,5 +6,3 @@ Owner: **Manoj Harridoss** (`@Manojh23`). This feature implements the `commuteLo
 - Client HTML/JS/CSS: `public/manoj/`
 - Tests: `tests/manoj-commutes.test.js`
 - Shared utilities (not owned by either teammate): `src/lib/`, `src/auth/`, `src/db/`, `public/js/api.js`, `public/css/base.css`.
-
-Do all work on your own Git branch, run `npm run verify`, and make a PR to `main`. Initial baseline was AI-assisted and should not be represented as personally authored work without review.

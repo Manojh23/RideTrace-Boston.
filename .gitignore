@@ -5,6 +5,7 @@ node_modules/
 *.log
 .DS_Store
 coverage/
+.vercel/
 # Local imports and database files
 data/
 *.zip

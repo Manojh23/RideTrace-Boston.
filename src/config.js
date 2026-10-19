@@ -4,6 +4,9 @@ export function getConfig(env = process.env) {
   if (production && (!secret || secret.length < 32 || secret.includes('REPLACE_'))) {
     throw new Error('Production requires APP_SECRET with at least 32 characters.');
   }
+  if (production && !env.MONGODB_URI) {
+    throw new Error('Production requires MONGODB_URI.');
+  }
   return {
     production,
     port: Number(env.PORT || 3000),
