@@ -20,7 +20,7 @@ test('production configuration requires a secret and an explicit database URI', 
   assert.equal(config.production, true);
 });
 
-test('hosted app retries startup, sets secure identity, and serves the commute API through HTTP', async (t) => {
+test('hosted app retries startup, sets secure identity, and serves both APIs through HTTP', async (t) => {
   let connections = 0;
   const filters = [];
   const db = {
@@ -72,9 +72,13 @@ test('hosted app retries startup, sets secure identity, and serves the commute A
     const owner = readVisitorCookie(cookie, process.env.APP_SECRET);
     assert.ok(owner);
     const responses = await Promise.all(
-      ['/api/commutes', '/api/commutes/stats', '/api/health'].map((path) =>
-        fetch(`${base}${path}`, { headers: { cookie: cookie.split(';')[0] } }),
-      ),
+      [
+        '/api/commutes',
+        '/api/commutes/stats',
+        '/api/transfers',
+        '/api/transfers/stats',
+        '/api/health',
+      ].map((path) => fetch(`${base}${path}`, { headers: { cookie: cookie.split(';')[0] } })),
     );
     for (const response of responses) {
       assert.equal(response.status, 200);
@@ -87,6 +91,12 @@ test('hosted app retries startup, sets secure identity, and serves the commute A
       filters
         .filter((item) => item.name === 'commuteLogs')
         .every((item) => item.filter.ownerId === owner),
+      true,
+    );
+    assert.equal(
+      filters
+        .filter((item) => item.name === 'transferReports')
+        .every((item) => item.filter.ownerId === undefined),
       true,
     );
   } finally {

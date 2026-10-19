@@ -19,6 +19,8 @@ export async function connectDatabase(uri, name) {
       const db = candidate.db(name);
       await Promise.all([
         db.collection('commuteLogs').createIndex({ ownerId: 1, date: -1 }),
+        db.collection('transferReports').createIndex({ observedAt: -1 }),
+        db.collection('transferReports').createIndex({ stopName: 1, daypart: 1 }),
         db.collection('mbtaStops').createIndex({ stopName: 1 }),
       ]);
       client = candidate;
