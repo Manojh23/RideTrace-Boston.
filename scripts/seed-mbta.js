@@ -2,6 +2,7 @@ import { readFile } from 'node:fs/promises';
 import { MongoClient } from 'mongodb';
 import { getConfig } from '../src/config.js';
 import { normalizeStops, readZipEntry } from './gtfs-utils.js';
+import { removeExactStopDuplicates } from './stop-catalog.js';
 
 const SOURCE = 'https://cdn.mbta.com/MBTA_GTFS.zip';
 const localFile = process.argv.find((arg) => arg.startsWith('--file='))?.slice('--file='.length);
@@ -43,6 +44,8 @@ try {
       { ordered: false },
     );
   }
+  const removed = await removeExactStopDuplicates(catalog);
+  if (removed) console.log(`Removed ${removed} identical duplicate catalog records.`);
   await catalog.createIndex({ stopId: 1 }, { unique: true });
   await catalog.createIndex({ stopName: 1 });
   console.log(

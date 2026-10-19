@@ -99,7 +99,7 @@ The commute buffer uses the nearest-rank 80th percentile of non-negative delays,
 npm run verify
 ```
 
-This runs 23 tests, ESLint, and Prettier. Individual commands are `npm test`, `npm run lint`, and `npm run format:check`. Tests cover validation, statistics, pagination, session startup, connection reuse, and the hosted HTTP entry point. Database tests use a mock MongoDB client; frontend tests use a mock DOM/API. They do not verify a live Atlas cluster, Vercel deployment, or browser layout. Local CRUD and incognito behavior were checked by Manoj. Real mobile testing and public deployment have not been verified.
+This runs 25 tests, ESLint, and Prettier. Individual commands are `npm test`, `npm run lint`, and `npm run format:check`. Tests cover validation, statistics, pagination, session startup, connection reuse, and the hosted HTTP entry point. Database tests use a mock MongoDB client; frontend tests use a mock DOM/API. They do not verify a live Atlas cluster, Vercel deployment, or browser layout. Local CRUD and incognito behavior were checked by Manoj. Real mobile testing and public CRUD have not been verified. The production build and public feature-page responses have been checked.
 
 ## Hosting
 
@@ -114,7 +114,11 @@ The repository includes Vercel’s Express preset in `vercel.json`. Vercel uses 
 
 These variables are needed for both Production and Preview deployments. The Atlas network access list must allow connections from the deployment. The stop catalog belongs in that hosted database; a local import does not populate Atlas. The existing seed command can import it when `.env` points to Atlas.
 
-The local server still runs through `npm start`. GitHub Pages alone cannot run the backend. No public deployment URL or live Atlas verification is recorded yet.
+The local server still runs through `npm start`. GitHub Pages alone cannot run the backend. The production deployment is [RideTrace Boston](https://ridetrace-boston.vercel.app). The Vercel build is ready. Both feature pages load, but API requests currently return 503 because Atlas network access is not configured. Public CRUD is not verified yet.
+
+Both features use the same Atlas database, `ridetrace_boston`: Manoj uses `commuteLogs`, Kavya uses `transferReports`, and the shared stop lookup uses `mbtaStops`. Atlas contains 8,035 distinct official stop IDs. Duplicate catalog rows remain from the interrupted import; rerunning the importer removes identical copies before creating the unique stop-ID index.
+
+This deployment was uploaded directly from the feature branch. Automatic deployment from GitHub still requires authorizing this repository in Vercel’s Git connection. Changes to GitHub alone will not update the website until that connection is enabled or another deployment is uploaded.
 
 ## Data source and attribution
 
