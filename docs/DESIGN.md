@@ -105,13 +105,6 @@ On narrower screens, the workspace stacks vertically and navigation wraps. Form 
 
 [Image sources and captions](mockups/README.md)
 
-### Live history and public feed
-
-The commute history includes owner controls and pagination. The transfer feed combines public reports with owner controls for the originating browser.
-
-| Commute history                                                                                                           | Transfer feed                                                                                                       |
-| ------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| [![Live commute history](screenshots/commutes-history-live-20261020.jpg)](screenshots/commutes-history-live-20261020.jpg) | [![Live transfer feed](screenshots/transfers-feed-live-20261020.jpg)](screenshots/transfers-feed-live-20261020.jpg) |
 
 ## 5. Technical notes
 
