@@ -120,4 +120,4 @@ Stop data: [MBTA / MassDOT GTFS feed](https://cdn.mbta.com/MBTA_GTFS.zip) and [M
 
 ## AI-use disclosure
 
-AI assistance supported research, planning, implementation, tests, documentation, and the project thumbnail. The team is responsible for the submitted application.
+AI assistance was used for research, brainstorming, and project planning. All implementation, testing, and documentation were completed independently by the team. 
