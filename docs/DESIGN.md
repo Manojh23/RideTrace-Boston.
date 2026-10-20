@@ -103,7 +103,7 @@ On narrower screens, the workspace stacks vertically and navigation wraps. Form 
 - Standard buttons, forms, links, and tables support normal browser behavior.
 - Text notices explain saved changes, errors, privacy, and unverified reports.
 
-[Image sources and captions](mockups/README.md)
+
 
 
 ## 5. Technical notes
