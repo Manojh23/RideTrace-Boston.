@@ -18,7 +18,6 @@ The app uses Node.js, Express, the native MongoDB driver, and vanilla JavaScript
 
 ## Live screenshots
 
-Desktop views captured from [the Vercel website](https://ridetrace-boston.vercel.app) on October 20, 2026. The records shown are demonstration entries.
 
 | Manoj’s commute dashboard                                                                                             | Kavya’s transfer board                                                                                               |
 | --------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
