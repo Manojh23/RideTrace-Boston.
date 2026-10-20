@@ -1,7 +1,7 @@
 # RideTrace Boston — Design Document
 
 **Team:** Manoj Harridoss and Kavya Kusuma Reddy Korem  
-**Course:** Northeastern University Web Development — Project 2  
+**Course:** CS5610 — Project 2  
 **Date:** October 19, 2026
 
 ## 1. Project description
