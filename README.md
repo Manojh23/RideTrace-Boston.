@@ -125,7 +125,7 @@ Stop data: [MBTA / MassDOT GTFS feed](https://cdn.mbta.com/MBTA_GTFS.zip) and [M
 
 ## Design Document
 
-The design document, including the project description, user personas, user stories, and mockups, is in [`design/design.md`](design/design.md).
+The design document, including the project description, user personas, user stories, and mockups, is in [`docs/design.md`](design/design.md).
 
 ## AI-use disclosure
 
