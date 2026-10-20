@@ -118,6 +118,15 @@ The public website is [RideTrace Boston](https://ridetrace-boston.vercel.app). T
 
 Stop data: [MBTA / MassDOT GTFS feed](https://cdn.mbta.com/MBTA_GTFS.zip) and [MBTA GTFS documentation](https://github.com/mbta/gtfs-documentation/blob/master/reference/gtfs.md). Data rights remain with the provider. The MIT license covers application code. RideTrace is not affiliated with the MBTA.
 
+## Video
+
+**Video link:** <https://www.youtube.com/watch?v=-IYju-o7Pzo>
+
+
+## Design Document
+
+The design document, including the project description, user personas, user stories, and mockups, is in [`design/design.md`](design/design.md).
+
 ## AI-use disclosure
 
 AI assistance was used for research, brainstorming, and project planning. All implementation, testing, and documentation were completed independently by the team. 
