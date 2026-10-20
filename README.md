@@ -126,4 +126,5 @@ Stop data: [MBTA / MassDOT GTFS feed](https://cdn.mbta.com/MBTA_GTFS.zip) and [M
 
 ## AI-use disclosure
 
-AI tools helped with MBTA research, planning, starter code, tests, and documentation.
+AI tools helped with MBTA research, planning.Implementation and documentation is done by us.
+
