@@ -2,7 +2,7 @@
 
 **Team:** Manoj Harridoss and Kavya Kusuma Reddy Korem  
 **Course:** CS5610 — Project 2  
-**Date:** October 19, 2026
+**Date:** October 20, 2026
 
 ## 1. Project description
 
@@ -54,7 +54,7 @@ These are fictional riders used to guide the design.
 
 | Story | Expected behavior                                                                                                                     |
 | ----- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| K1    | Valid reports are saved in MongoDB and appear publicly. MBTA stop suggestions are available after importing the catalog.              |
+| K1    | Valid reports are saved in MongoDB and appear publicly. MBTA stop suggestions use the imported reference catalog.                     |
 | K2    | Filters update the feed and matching statistics. Reports show dates, transfer times, and unverified labels. Older reports are marked. |
 | K3    | Only the originating browser sees owner controls. The backend also checks ownership for updates and deletions.                        |
 
@@ -69,23 +69,23 @@ Each teammate’s feature includes its own frontend, API routes, validation, sta
 
 ## 4. Design mockups
 
-The boards show simplified wireframes beside interface pictures. The overview uses a concept image; the two feature boards use Manoj’s local screenshots with test entries. The mobile board shows the planned layout rather than a tested phone capture.
+The desktop boards pair the original layout wireframes with screenshots captured from the public Vercel app on October 20, 2026. The dashboard screenshots show existing demonstration records. The mobile board remains a layout wireframe.
 
 ### Overview
 
-![Overview wireframe and interface concept](mockups/overview-wireframe.png)
+![Overview wireframe and live Vercel screenshot](mockups/overview-wireframe.png)
 
 The home page explains the app and links directly to either feature. Shared navigation also links to the usage guide.
 
 ### Manoj’s commute dashboard
 
-![Commute dashboard wireframe and local screenshot](mockups/commutes-wireframe.png)
+![Commute dashboard wireframe and live Vercel screenshot](mockups/commutes-wireframe.png)
 
 The page places private-history information and summary cards first. Below them are the entry form, weekday chart, buffer explanation, and history table. The history includes filters and Edit/Delete controls.
 
 ### Kavya’s transfer board
 
-![Transfer board wireframe and local screenshot](mockups/transfers-wireframe.png)
+![Transfer board wireframe and live Vercel screenshot](mockups/transfers-wireframe.png)
 
 The page shows the unverified-report notice and statistics above the form and public feed. Entry fields and feed filters are separate. Reports show dates, routes, durations, and owner controls where allowed.
 
@@ -93,7 +93,7 @@ The page shows the unverified-report notice and statistics above the form and pu
 
 ![Mobile wireframes for both features](mockups/mobile-wireframe.png)
 
-On narrower screens, the workspace stacks vertically and navigation wraps. Form fields become one column on small phones. The commute table can scroll inside its panel, and long report text wraps. These are layout goals; real mobile testing has not been recorded.
+On narrower screens, the workspace stacks vertically and navigation wraps. Form fields become one column on small phones. The commute table can scroll inside its panel, and long report text wraps. The mobile board illustrates this responsive layout.
 
 ### Common design choices
 
@@ -104,6 +104,14 @@ On narrower screens, the workspace stacks vertically and navigation wraps. Form 
 - Text notices explain saved changes, errors, privacy, and unverified reports.
 
 [Image sources and captions](mockups/README.md)
+
+### Live history and public feed
+
+The commute history includes owner controls and pagination. The transfer feed combines public reports with owner controls for the originating browser.
+
+| Commute history                                                                                                           | Transfer feed                                                                                                       |
+| ------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| [![Live commute history](screenshots/commutes-history-live-20261020.jpg)](screenshots/commutes-history-live-20261020.jpg) | [![Live transfer feed](screenshots/transfers-feed-live-20261020.jpg)](screenshots/transfers-feed-live-20261020.jpg) |
 
 ## 5. Technical notes
 

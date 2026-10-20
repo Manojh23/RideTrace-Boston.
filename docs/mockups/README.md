@@ -1,12 +1,14 @@
 # Design images
 
-| Board                                       | Source                                                    |
-| ------------------------------------------- | --------------------------------------------------------- |
-| [Overview](overview-wireframe.png)          | Wireframe beside the original overview concept image      |
-| [Commute dashboard](commutes-wireframe.png) | Wireframe beside Manoj’s local screenshot, `image(3).png` |
-| [Transfer board](transfers-wireframe.png)   | Wireframe beside Manoj’s local screenshot, `image(4).png` |
-| [Mobile](mobile-wireframe.png)              | Layout drawings for both features                         |
+The desktop boards pair layout wireframes with actual screenshots from the public Vercel website captured on October 20, 2026. The mobile board is a wireframe.
 
-The boards were prepared on October 19, 2026 to explain the current design. Feature screenshots show test entries and exclude browser chrome. They predate the pagination/mobile styling update. The overview is illustrative; the mobile drawings are not screenshots or evidence of device testing.
+| Board                                       | Screenshot source                                                              |
+| ------------------------------------------- | ------------------------------------------------------------------------------ |
+| [Overview](overview-wireframe.png)          | [Live overview](../screenshots/overview-live-20261020.jpg) at `/`              |
+| [Commute dashboard](commutes-wireframe.png) | [Live dashboard](../screenshots/commutes-live-20261020.jpg) at `/manoj/`       |
+| [Transfer board](transfers-wireframe.png)   | [Live transfer board](../screenshots/transfers-live-20261020.jpg) at `/kavya/` |
+| [Mobile](mobile-wireframe.png)              | Responsive layout wireframes for both features                                 |
 
-The [stop-suggestion screenshot](../screenshots/transfers-live.png) shows imported MBTA reference names in the transfer form. Original concept images are retained as `overview-concept.png`, `commutes-concept.png`, and `transfers-concept.png`.
+The live captures retain the interface and existing demonstration records. The overview’s illustrative card belongs to the actual home page. The interface pictures are screenshots, while the wireframes explain layout and interaction choices.
+
+Original concept illustrations remain in this folder as `overview-concept.png`, `commutes-concept.png`, and `transfers-concept.png`. The [earlier stop-suggestion capture](../screenshots/transfers-live.png) documents the imported reference catalog.

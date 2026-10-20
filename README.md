@@ -3,7 +3,7 @@
 A web app for tracking MBTA commute delays and sharing transfer experiences.
 
 **Authors:** Manoj Harridoss (`@Manojh23`) and Kavya Kusuma Reddy Korem (`@kavya-korem`)  
-**Course:** Northeastern University Web Development — Project 2  
+**Course:** CS5610 Web Development — Project 2  
 **Class links:** [Course project thread](https://webdev-online-neu.slack.com/archives/C09DCBJP2BU/p1759790564109799) · [Architecture video](https://www.youtube.com/watch?v=GqW1K1jHJCc&list=PLmRfPZr9-VoHJ6K1g3URENMAVYPXCQFyw&index=30)  
 **License:** [MIT](LICENSE)
 
@@ -16,19 +16,17 @@ RideTrace helps riders compare planned and actual travel times and learn from ot
 
 The app uses Node.js, Express, the native MongoDB driver, and vanilla JavaScript ES modules. Both features share the server and database connection but use separate editable collections.
 
-## Screenshot
+## Live screenshots
 
-Local transfer page showing imported MBTA stop suggestions. The visible reports are test entries.
+Desktop views captured from [the Vercel website](https://ridetrace-boston.vercel.app) on October 20, 2026. The records shown are demonstration entries.
 
-![Transfer form with MBTA stop suggestions](docs/screenshots/transfers-live.png)
+| Manoj’s commute dashboard                                                                                             | Kavya’s transfer board                                                                                               |
+| --------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| [![Live commute dashboard](docs/screenshots/commutes-live-20261020.jpg)](docs/screenshots/commutes-live-20261020.jpg) | [![Live transfer board](docs/screenshots/transfers-live-20261020.jpg)](docs/screenshots/transfers-live-20261020.jpg) |
 
 ## Design document
 
-[Read the design document](docs/DESIGN.md) for the project description, user personas, user stories, and mockups.
-
-| Manoj’s dashboard                                                                                                               | Kavya’s transfer board                                                                                                         |
-| ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| [![Commute dashboard wireframe and local screenshot](docs/mockups/commutes-wireframe.png)](docs/mockups/commutes-wireframe.png) | [![Transfer board wireframe and local screenshot](docs/mockups/transfers-wireframe.png)](docs/mockups/transfers-wireframe.png) |
+[Read the design document](docs/DESIGN.md) for the project description, personas, user stories, feature ownership, wireframes, and live screenshots.
 
 ## Build and run
 
@@ -99,7 +97,7 @@ The commute buffer uses the nearest-rank 80th percentile of non-negative delays,
 npm run verify
 ```
 
-This runs 25 tests, ESLint, and Prettier. Individual commands are `npm test`, `npm run lint`, and `npm run format:check`. Tests cover validation, statistics, pagination, session startup, connection reuse, and the hosted HTTP entry point. Automated tests use mock database and DOM implementations. Separate live checks confirmed database health, stop lookup, and commute creation and editing on Vercel. Manoj checked local CRUD and incognito behavior. The automated suite does not verify browser layout or complete live CRUD.
+This runs 25 tests, ESLint, and Prettier. Tests cover validation, statistics, pagination, session startup, connection reuse, and the hosted HTTP entry point. The automated suite uses mock database and DOM implementations. Individual commands are `npm test`, `npm run lint`, and `npm run format:check`.
 
 ## Hosting
 
@@ -112,13 +110,11 @@ The repository includes Vercel’s Express preset in `vercel.json`. Vercel uses 
 | `APP_SECRET`              | A stable random secret of at least 32 characters |
 | `NODE_ENV`                | `production`                                     |
 
-These variables are needed for both Production and Preview deployments. The Atlas network access list must allow connections from the deployment. The stop catalog belongs in that hosted database; a local import does not populate Atlas. The existing seed command can import it when `.env` points to Atlas.
+The deployed app reads these values on the server. The frontend calls the Express API and receives JSON, without receiving the Atlas connection string or application secret. `.env` files are excluded from Git.
 
-The production website is [RideTrace Boston](https://ridetrace-boston.vercel.app). Vercel hosts the app, and MongoDB Atlas stores its data. The database health check and stop lookup return successful responses. The local server still runs through `npm start`.
+Both features use the Atlas database `ridetrace_boston`. Manoj’s records use `commuteLogs`, Kavya’s reports use `transferReports`, and the read-only `mbtaStops` catalog provides official stop-name suggestions. The catalog contains more than 1,000 documents. User-created commute and transfer records are separate from the reference data.
 
-Both features use the same Atlas database, `ridetrace_boston`: Manoj uses `commuteLogs`, Kavya uses `transferReports`, and the shared stop lookup uses `mbtaStops`. Atlas contains 8,035 distinct official stop IDs. The importer updates records by stop ID, removes identical duplicates, and creates a unique stop-ID index.
-
-The current deployment was uploaded directly. Deployment is manual; GitHub pushes do not currently trigger a Vercel deployment.
+The public website is [RideTrace Boston](https://ridetrace-boston.vercel.app). The deployment uses Vercel’s Express preset and a reusable MongoDB connection. Local development uses `npm start`.
 
 ## Data source and attribution
 
@@ -126,5 +122,4 @@ Stop data: [MBTA / MassDOT GTFS feed](https://cdn.mbta.com/MBTA_GTFS.zip) and [M
 
 ## AI-use disclosure
 
-AI tools helped with MBTA research, planning.Implementation and documentation is done by us.
-
+AI assistance supported research, planning, implementation, tests, documentation, and the project thumbnail. The team is responsible for the submitted application.
