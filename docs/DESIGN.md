@@ -103,9 +103,6 @@ On narrower screens, the workspace stacks vertically and navigation wraps. Form 
 - Standard buttons, forms, links, and tables support normal browser behavior.
 - Text notices explain saved changes, errors, privacy, and unverified reports.
 
-
-
-
 ## 5. Technical notes
 
 The frontend uses HTML, CSS, and vanilla JavaScript ES modules. Fetch requests exchange JSON with Express routes. The backend uses the native MongoDB driver.

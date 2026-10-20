@@ -18,7 +18,6 @@ The app uses Node.js, Express, the native MongoDB driver, and vanilla JavaScript
 
 ## Live screenshots
 
-
 | Manoj’s commute dashboard                                                                                             | Kavya’s transfer board                                                                                               |
 | --------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
 | [![Live commute dashboard](docs/screenshots/commutes-live-20261020.jpg)](docs/screenshots/commutes-live-20261020.jpg) | [![Live transfer board](docs/screenshots/transfers-live-20261020.jpg)](docs/screenshots/transfers-live-20261020.jpg) |
