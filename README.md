@@ -123,10 +123,6 @@ Stop data: [MBTA / MassDOT GTFS feed](https://cdn.mbta.com/MBTA_GTFS.zip) and [M
 **Video link:** <https://www.youtube.com/watch?v=-IYju-o7Pzo>
 
 
-## Design Document
-
-The design document, including the project description, user personas, user stories, and mockups, is in [`docs/DESIGN.md`](docs/DESIGN.md).
-
 ## AI-use disclosure
 
 AI assistance was used for research, brainstorming, and project planning. All implementation, testing, and documentation were completed independently by the team. 
