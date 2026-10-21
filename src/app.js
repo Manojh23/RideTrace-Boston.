@@ -67,7 +67,8 @@ deploymentApp.use(async (req, res, next) => {
       hostedApp ||= createApp(db, config);
     }
     hostedApp(req, res, next);
-  } catch {
+  } catch (error) {
+    console.error('RideTrace failed to start:', error);
     res.setHeader('Cache-Control', 'private, no-store');
     res.status(503).json({ error: 'Service is temporarily unavailable. Please try again.' });
   }
