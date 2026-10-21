@@ -26,6 +26,11 @@ function transferFilter(query) {
   return filter;
 }
 
+// Public reports never include ownerId; isMine tells the browser which ones it can edit.
+function toPublicReport({ ownerId, ...record }, visitorId) {
+  return { ...record, isMine: ownerId === visitorId };
+}
+
 export function transferRoutes(db, Router) {
   const router = Router();
   const collection = db.collection('transferReports');
@@ -57,10 +62,7 @@ export function transferRoutes(db, Router) {
         collection.countDocuments(filter),
       ]);
       res.json({
-        records: records.map(({ ownerId, ...record }) => ({
-          ...record,
-          isMine: ownerId === req.visitorId,
-        })),
+        records: records.map((record) => toPublicReport(record, req.visitorId)),
         total,
         page,
         pages: Math.max(1, Math.ceil(total / limit)),
@@ -75,9 +77,7 @@ export function transferRoutes(db, Router) {
       const now = new Date();
       const record = { ...fields, ownerId: req.visitorId, createdAt: now, updatedAt: now };
       const result = await collection.insertOne(record);
-      const { ownerId: _ownerId, ...publicRecord } = { ...record, _id: result.insertedId };
-      void _ownerId;
-      res.status(201).json({ ...publicRecord, isMine: true });
+      res.status(201).json(toPublicReport({ ...record, _id: result.insertedId }, req.visitorId));
     }),
   );
 
@@ -93,9 +93,7 @@ export function transferRoutes(db, Router) {
       );
       if (!updated)
         throw new HttpError(404, 'Transfer report not found or not owned by this browser.');
-      const { ownerId: _ownerId, ...record } = updated;
-      void _ownerId;
-      res.json({ ...record, isMine: true });
+      res.json(toPublicReport(updated, req.visitorId));
     }),
   );
 
