@@ -60,7 +60,7 @@ Import the official stop catalog, then start the app:
 
 ```bash
 npm run seed:mbta
-npm start
+npm run dev
 ```
 
 The importer downloads [MBTA GTFS data](https://cdn.mbta.com/MBTA_GTFS.zip), checks for more than 1,000 stop/platform records, and prints the imported count. Manoj’s local import contained 8,035 records. A downloaded archive can also be imported with `node --env-file=.env scripts/seed-mbta.js --file=/path/to/MBTA_GTFS.zip`.
